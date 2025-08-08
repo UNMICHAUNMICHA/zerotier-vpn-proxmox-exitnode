@@ -2,14 +2,8 @@
 **✅ สรุปวิธีทำ ZeroTier → LAN Bridge แบบถาวร
 🧱 สิ่งที่ต้องมี
 เครื่อง Linux (เช่น Ubuntu/Debian)**
-## host
-nano /etc/pve/lxc/100.conf
-unprivileged: 1
-lxc.apparmor.profile: unconfined
-lxc.cgroup.devices.allow: a
-lxc.cap.drop:
-lxc.cgroup2.devices.allow: c 10:200 rwm
-lxc.mount.entry: /dev/net/tun dev/net/tun none bind,create=file
+
+
 
 
  
@@ -19,6 +13,15 @@ ZeroTier Network ต้องอนุญาตเครื่อง (authorized
 Network LAN จริง: เช่น 192.168.0.0/24
 
 🪜 ขั้นตอน
+## host
+nano /etc/pve/lxc/100.conf
+unprivileged: 1
+lxc.apparmor.profile: unconfined
+lxc.cgroup.devices.allow: a
+lxc.cap.drop:
+lxc.cgroup2.devices.allow: c 10:200 rwm
+lxc.mount.entry: /dev/net/tun dev/net/tun none bind,create=file
+
 
 ## 1. Join ZeroTier และตรวจสอบ IP
 
