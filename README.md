@@ -14,7 +14,8 @@ Network LAN จริง: เช่น 192.168.0.0/24
 
 🪜 ขั้นตอน
 ## host
-nano /etc/pve/lxc/100.conf
+* nano /etc/pve/lxc/100.conf
+
 unprivileged: 1
 lxc.apparmor.profile: unconfined
 lxc.cgroup.devices.allow: a
