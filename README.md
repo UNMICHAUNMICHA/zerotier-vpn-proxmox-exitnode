@@ -45,12 +45,11 @@ sudo iptables -t nat -A POSTROUTING -o ens18 -j MASQUERADE
 ## 4. ติดตั้ง iptables-persistent เพื่อให้ NAT ติดถาวร
 
 sudo apt install iptables-persistent
-sudo netfilter-persistent save
-~~
+sudo netfilter-persistent
 
 ## 5. ตั้ง static route บน ZeroTier Central
 
-~~
+
 ไปที่ https://my.zerotier.com → Network → Advanced → Routes:
 
 
