@@ -169,8 +169,3 @@
 - **Unprivileged LXC**: การตั้งค่า `lxc.cgroup2.devices.allow` และ `lxc.mount.entry` จำเป็นสำหรับ unprivileged container เพื่อให้ ZeroTier ทำงานได้
 
 ---
-
-## สรุป
-คู่มือนี้ช่วยให้คุณติดตั้ง ZeroTier และตั้งค่า LAN Bridge แบบถาวรบน Proxmox LXC ได้อย่างสมบูรณ์ คุณสามารถเชื่อมต่อจาก ZeroTier network ไปยังอุปกรณ์ใน LAN จริงได้อย่างราบรื่น เหมาะสำหรับการเข้าถึงอุปกรณ์ เช่น IP camera หรือ NAS โดยไม่ต้องพึ่ง P2P ที่ไม่ปลอดภัย
-
-หากต้องการไฟล์ shell script (.sh) หรือเอกสาร PDF เพิ่มเติม แจ้งมาได้เลย!
