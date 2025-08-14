@@ -90,10 +90,17 @@
 ### 4. ตั้งค่า NAT (ZeroTier → LAN)
 - ตั้งค่า iptables เพื่อทำ NAT จาก ZeroTier ไปยัง LAN:
   ```bash
-  sudo iptables -t nat -A POSTROUTING -o ens18 -j MASQUERADE
+     # เปิด IP forwarding
+   sudo sysctl -w net.ipv4.ip_forward=1
+   sudo sed -i 's/^#\?net.ipv4.ip_forward.*/net.ipv4.ip_forward=1/' /etc/sysctl.conf
+   
+   # NAT จาก ZeroTier ไป LAN
+   sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+   
+   # อนุญาต Forward
+   sudo iptables -A FORWARD -i eth0 -o ztklhwkfmx -m state --state RELATED,ESTABLISHED -j ACCEPT
+   sudo iptables -A FORWARD -i ztklhwkfmx -o eth0 -j ACCEPT
   ```
-  **สำคัญ**: แทน `ens18` ด้วยชื่อ LAN interface ของคุณ (ตรวจสอบด้วย `ip a`)
-
 ---
 
 ### 5. ทำให้ NAT ถาวร
