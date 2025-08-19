@@ -1,0 +1,59 @@
+✅ ค่าระบบที่ต้องมี
+
+net.ipv4.ip_forward = 1 (เปิด IP Forwarding แล้ว)
+
+WAN = eth0 (ออกเน็ตผ่าน 192.168.0.1)
+
+Interfaces ที่ใช้งาน
+
+zteb4kucrc → ZeroTier (172.24.0.0/16)
+
+ztklhwkfmx → ZeroTier (192.168.192.0/24)
+
+tailscale0 → Tailscale (100.64.0.0/10)
+
+🔧 iptables NAT + Forward (ฝั่งเซิร์ฟเวอร์ Exit Node)
+WAN_IF="eth0"
+
+# ========== ZeroTier (172.24.0.0/16) ==========
+iptables -t nat -A POSTROUTING -o $WAN_IF -s 172.24.0.0/16 -j MASQUERADE
+iptables -A FORWARD -i zteb4kucrc -o $WAN_IF -j ACCEPT
+iptables -A FORWARD -i $WAN_IF -o zteb4kucrc -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+
+# ========== ZeroTier (192.168.192.0/24) ==========
+iptables -t nat -A POSTROUTING -o $WAN_IF -s 192.168.192.0/24 -j MASQUERADE
+iptables -A FORWARD -i ztklhwkfmx -o $WAN_IF -j ACCEPT
+iptables -A FORWARD -i $WAN_IF -o ztklhwkfmx -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+
+# ========== Tailscale (100.64.0.0/10) ==========
+iptables -t nat -A POSTROUTING -o $WAN_IF -s 100.64.0.0/10 -j MASQUERADE
+iptables -A FORWARD -i tailscale0 -o $WAN_IF -j ACCEPT
+iptables -A FORWARD -i $WAN_IF -o tailscale0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+
+
+แล้วบันทึกถาวร:
+
+apt install iptables-persistent -y
+netfilter-persistent save
+
+🖥️ ฝั่ง Client
+🔹 Tailscale
+tailscale up --exit-node=100.101.139.126
+
+🔹 ZeroTier
+
+เข้า my.zerotier.com → Network → Routes แล้วเพิ่ม:
+
+0.0.0.0/0 via 172.24.3.192
+
+0.0.0.0/0 via 192.168.192.123
+
+🎯 สรุป
+
+ตอนนี้ Client เลือกได้เลยว่าจะออกเน็ตผ่าน Tailscale หรือ ZeroTier
+
+ZeroTier เหมาะกับกรณีควบคุม routing หลาย subnet
+
+Tailscale เหมาะกับ exit-node แบบ personal (ง่าย, auto)
+
+คุณอยากให้ผมทำเป็น bash script auto setup (detect WAN interface, ใส่ iptables, save rules) เอาไว้รันทีเดียวเสร็จมั้ยครับ? 🔥
